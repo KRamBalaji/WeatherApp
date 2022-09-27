@@ -25,9 +25,15 @@ struct WeatherView: View {
                 
                 VStack {
                     HStack {
-                        VStack(spacing: 20) {
-                            Image(systemName: "sun.max")
-                                .font(.system(size: 40))
+                        VStack() {
+                            AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(weather.weather[0].icon)@2x.png")) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 80)
+                            } placeholder: {
+                                ProgressView()
+                            }
                             Text(weather.weather[0].main)
                         }
                         .frame(width: 150, alignment: .leading)
@@ -63,19 +69,25 @@ struct WeatherView: View {
                 Spacer()
                 VStack(alignment: .leading, spacing: 20) {
                     Text("Weather now")
-                        .bold()
-                        .padding(.bottom)
+                        .foregroundColor(Color(hue: 0.656, saturation: 0.787, brightness: 0.354))
+                        .font(.system(size: 32))
+                        .fontWeight(.black)
+                        .padding()
                     
                     HStack {
                         WeatherRow(logo: "thermometer", name: "Min temp", value: (weather.main.tempMin.roundDouble() + ("°")))
+                            .padding(10)
                         Spacer()
                         WeatherRow(logo: "thermometer", name: "Max temp", value: (weather.main.tempMax.roundDouble() + "°"))
+                            .padding(10)
                     }
                     
                     HStack {
                         WeatherRow(logo: "wind", name: "Wind speed", value: (weather.wind.speed.roundDouble() + " m/s"))
+                            .padding(10)
                         Spacer()
                         WeatherRow(logo: "humidity", name: "Humidity", value: "\(weather.main.humidity.roundDouble())%")
+                            .padding(10)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
